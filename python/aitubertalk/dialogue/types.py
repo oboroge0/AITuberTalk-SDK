@@ -2,8 +2,9 @@
 Type definitions for dialogue control module
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
 from typing import List, Optional
 
 
@@ -33,13 +34,29 @@ class QueuedParticipant:
     queued_at: datetime
 
 
+class FloorSystemState(Enum):
+    """Possible states of the floor system"""
+    IDLE = "idle"
+    THINKING = "thinking"
+    PREPARING = "preparing"
+    SPEAKING = "speaking"
+    COOLDOWN = "cooldown"
+
+
 @dataclass
 class FloorState:
     """Current state of the floor system"""
     current_holder: Optional[str]
-    state: str  # idle, thinking, preparing, speaking, cooldown
-    queue: List[QueuedParticipant]
+    state: FloorSystemState
+    queue: List[QueuedParticipant] = field(default_factory=list)
     last_state_change: datetime
+
+
+class MessageType(Enum):
+    """Types of messages in the chat"""
+    TEXT = "text"
+    SYSTEM = "system"
+    AI_RESPONSE = "ai_response"
 
 
 @dataclass
@@ -50,5 +67,5 @@ class Message:
     sender_name: str
     content: str
     target_aituber: Optional[str] = None
-    timestamp: Optional[datetime] = None
-    message_type: str = "text"  # text, system, ai_response
+    timestamp: datetime = field(default_factory=datetime.now)
+    message_type: MessageType = MessageType.TEXT

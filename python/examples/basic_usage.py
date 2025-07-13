@@ -87,7 +87,7 @@ async def main():
         await asyncio.sleep(10)  # Run for 10 seconds in demo
         
     except KeyboardInterrupt:
-        print("\\nShutting down...")
+        print("\nShutting down...")
     except Exception as e:
         print(f"Error: {e}")
     finally:
